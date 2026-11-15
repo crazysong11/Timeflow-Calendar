@@ -29,6 +29,8 @@ An early working version is available to run from source. Continuous browsing, e
 3. Select a card or an item in the list below to edit it. Use **回到现在** (Back to now) to return to the current moment. Select a date and **前往** (Go) to align that day’s 00:00 with the left edge of the timeline.
 4. In the Windows app, select **贴到桌面** (Pin to desktop), then **调整布局** (Adjust layout). Drag the top handle to move it or the lower-right handle to resize it, and select **完成调整** (Finish adjusting) to lock the layout.
 
+Opening the Windows app again reuses the running instance. Regular windows are brought forward; pinned calendars keep their desktop layout.
+
 The interface is currently in Simplified Chinese. See the [usage guide](docs/usage.md) (Chinese) for scrolling, storage, and backup details.
 
 ## Run from source

@@ -199,3 +199,22 @@ cargo test --manifest-path src-tauri/Cargo.toml --locked --lib
 - 8 项现有前端与存储测试、TypeScript 检查、前端生产构建和 Windows 调试版构建通过。
 - 读取生成 exe 的 PE 头，确认子系统为 `IMAGE_SUBSYSTEM_WINDOWS_GUI`（值 2），并启动新版应用。
 - 双语 README 与文档链接检查通过；安装包继续使用现有 NSIS 构建配置。
+
+## 单实例启动验证
+
+2026 年 11 月 15 日修复重复运行 exe 会出现多个日历的问题。
+
+- 接入 Tauri 官方 Single Instance 插件，并在插件列表首位注册。
+- Rust Clippy、3 项 Rust 单元测试、TypeScript 检查、前端生产构建与 Windows 调试版构建通过。
+- 进程级验证：连续重复打开 3 次、同时启动 5 次，均只保留一个日历进程；退出后正常重新启动。
+- 普通窗口最小化后再次打开 exe，原窗口恢复，原进程编号保持不变，第二个进程以状态码 0 退出。
+- 桌面模式的固定状态、位置与大小在重复启动后保持不变；正常关闭普通窗口后也可以再次启动。
+- 验证完成后恢复原桌面偏好，启动新版日历。
+
+复现进程级检查前，从托盘退出正在使用的日历，再运行：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy RemoteSigned -File scripts/test-single-instance.ps1
+```
+
+脚本启动自己的测试进程并在结束时清理它们；已有日历运行时会提示先退出。浏览器预览继续按各浏览器标签页运行。

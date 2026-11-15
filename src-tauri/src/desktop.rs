@@ -133,6 +133,29 @@ pub fn desktop_status(state: tauri::State<'_, DesktopState>) -> DesktopStatus {
     }
 }
 
+// A repeated launch reuses the existing UI and keeps its desktop preference intact.
+pub fn reveal_existing(app: &tauri::AppHandle) {
+    let Some(window) = app.get_webview_window("main") else {
+        return;
+    };
+    let state = app.state::<DesktopState>();
+    let pinned = state
+        .0
+        .lock()
+        .unwrap_or_else(|e| e.into_inner())
+        .normal
+        .is_some();
+    if matches!(window.is_visible(), Ok(false)) {
+        let _ = window.show();
+    }
+    if !pinned {
+        if matches!(window.is_minimized(), Ok(true)) {
+            let _ = window.unminimize();
+        }
+        let _ = window.set_focus();
+    }
+}
+
 fn preferences_path(app: &tauri::AppHandle) -> Result<std::path::PathBuf, String> {
     app.path()
         .app_config_dir()

@@ -32,6 +32,8 @@ An early working version is available to run from source. Continuous browsing, e
 3. Select a card or an item in the list below to edit it. Use **回到现在** (Back to now) to return to the current moment. Select a date and **前往** (Go) to align that day’s 00:00 with the left edge of the timeline.
 4. In the Windows app, select **贴到桌面** (Pin to desktop), then **调整布局** (Adjust layout). Drag the top handle to move it or the lower-right handle to resize it, and select **完成调整** (Finish adjusting) to lock the layout.
 
+Opening the Windows app again reuses the running instance. Regular windows are brought forward; pinned calendars keep their desktop layout.
+
 The interface is currently in Simplified Chinese. See the [usage guide](docs/usage.md) (Chinese) for scrolling, storage, and backup details.
 
 ## Run from source
@@ -97,6 +99,8 @@ Timeflow Calendar 用连续的时间轴呈现日程：今天的 23:00 与明天�
 2. 双击空白处或点击“新建事项”，填写标题和起止时间。跨午夜安排请选择次日的结束日期。
 3. 点击事项卡片或下方列表进行编辑，通过“回到现在”返回当前时刻。选择日期并点击“前往”，将当天 00:00 对齐到时间轴左侧。
 4. Windows 应用点击“贴到桌面”，再开启“调整布局”。拖动顶部移动位置，拖动右下角调整大小，点击“完成调整”固定布局。
+
+再次打开 Windows 应用会复用已运行的实例：普通窗口会被唤回，桌面模式保持原有布局。
 
 滚轮操作、数据位置与备份方式见[使用指南](docs/usage.md)。
 

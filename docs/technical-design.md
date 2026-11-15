@@ -109,3 +109,9 @@ work/                   本地验证记录和临时文件
 桌面模式使用 `windows-sys` 调用 Windows 窗口 API，由 Rust 管理桌面宿主挂接、恢复和位置尺寸。Tauri 内置托盘提供常驻入口，`serde` 与 `serde_json` 保存模式和布局；日程仍由 SQLite 管理。
 
 前端通过限定职责的命令切换模式、开始调整、更新位移和完成调整。Rust 校验位移范围，将逻辑像素换算为物理像素，并将面板约束在显示器工作区内。实现与验收见[桌面模式设计](desktop-mode.md)。
+
+## 单实例启动
+
+使用 [Tauri 官方 Single Instance 插件](https://v2.tauri.app/plugin/single-instance/)，在插件列表首位注册，使重复启动在 SQLite、托盘和桌面布局初始化之前交由已有实例处理。Windows 实例标识来自 `app.timeflow.calendar`，由系统命名互斥量协调，退出后释放。
+
+重复启动回调调度到主线程：普通窗口按需显示、恢复最小化并聚焦；桌面模式保留宿主关系和布局。已有 React 页面和编辑内容继续保留。插件版本记录在 Cargo.toml 与 Cargo.lock 中。

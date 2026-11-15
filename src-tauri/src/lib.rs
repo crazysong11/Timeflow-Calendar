@@ -4,6 +4,10 @@ mod desktop;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|app, _, _| {
+            let handle = app.clone();
+            let _ = app.run_on_main_thread(move || desktop::reveal_existing(&handle));
+        }))
         .manage(desktop::DesktopState::default())
         .invoke_handler(tauri::generate_handler![
             desktop::desktop_status,

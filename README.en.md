@@ -14,7 +14,7 @@ Timeflow Calendar presents your schedule on a continuous timeline: 23:00 today s
 
 - **Browse time continuously.** Drag or scroll through evenly spaced hourly markers, with date headers above the timeline.
 - **Schedule at any time.** Create, edit, and delete events with minute-level start and end times. Events spanning midnight stay together, and overlapping events appear on separate rows.
-- **Find your place.** Return to the current moment, jump to a date, or switch between 4-, 8-, 12-, and 24-hour views.
+- **Find your place.** Return to the current moment or jump to a date. The default automatic view fits the window; fixed 4-, 8-, 12-, and 24-hour views are also available.
 - **Keep your schedule locally.** The Windows app saves events in SQLite and restores them when reopened. Events can include notes and a color.
 
 ## Current status

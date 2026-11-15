@@ -17,7 +17,7 @@ Timeflow Calendar presents your schedule on a continuous timeline: 23:00 today s
 
 - **Browse time continuously.** Drag or scroll through evenly spaced hourly markers, with date headers above the timeline.
 - **Schedule at any time.** Create, edit, and delete events with minute-level start and end times. Events spanning midnight stay together, and overlapping events appear on separate rows.
-- **Find your place.** Return to the current moment, jump to a date, or switch between 4-, 8-, 12-, and 24-hour views.
+- **Find your place.** Return to the current moment or jump to a date. The default automatic view fits the window; fixed 4-, 8-, 12-, and 24-hour views are also available.
 - **Keep your schedule locally.** The Windows app saves events in SQLite and restores them when reopened. Events can include notes and a color.
 
 ## Current status
@@ -80,7 +80,7 @@ Timeflow Calendar 用连续的时间轴呈现日程：今天的 23:00 与明天�
 
 - **连续浏览时间**：左右拖动或滚动，以均匀的小时刻度浏览过去与未来，上方日期头部帮助定位。
 - **随时安排事项**：新增、编辑和删除事项，起止时间精确到分钟。跨午夜事项保持完整，重叠事项分行显示。
-- **快速定位**：回到当前时刻、跳转日期，或切换 4、8、12、24 小时视野。
+- **快速定位**：回到当前时刻或跳转日期。默认自动视野随窗口宽度展开，也可选择固定 4、8、12、24 小时。
 - **本地保存**：Windows 应用使用 SQLite 保存日程，重新打开后恢复；事项支持备注与颜色。
 
 ## 当前状态

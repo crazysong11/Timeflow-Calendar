@@ -16,7 +16,7 @@ export default function App() {
   const [viewMode, setViewMode] = useState<ViewMode>("auto");
   const [width, setWidth] = useState(900);
   const [anchor, setAnchor] = useState(Date.now);
-  const uiScale = useUiScale();
+  const uiScale = useUiScale(pinned);
   const span = viewSpan(viewMode, width, uiScale);
   const start = viewStart(anchor, span);
   const setStart = (value: number) => setAnchor(value + span / 4);

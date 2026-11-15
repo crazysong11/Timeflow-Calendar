@@ -12,6 +12,10 @@
   --green: #396850;
 }
 * { box-sizing: border-box; }
+:root:has(.desktop-mode) {
+  /* A desktop panel reaches its minimum scale at 640 × 480 CSS pixels. */
+  font-size: clamp(10px, min(calc(6px + 0.625vw), calc(6px + 0.833333vh)), 14px);
+}
 body { margin: 0; }
 button, input, textarea, select { font: inherit; }
 button { cursor: pointer; color: inherit; }
@@ -33,6 +37,13 @@ button:hover:not(:disabled) { filter: brightness(.97); }
 .desktop-mode .calendar { box-shadow: none; }
 .desktop-mode .app-footer { display: none; }
 .desktop-mode .agenda { margin-top: 1.125rem; }
+.desktop-mode .calendar-toolbar { padding: 0.875rem 1.125rem 0.625rem; }
+.desktop-mode .timeline-controls { padding: 0 1.125rem 0.625rem; }
+.desktop-mode .timeline-footer { padding: 0.625rem 1rem; }
+.desktop-mode .timeline-event { min-height: 54px; }
+.desktop-mode .date-band { min-height: 28px; padding-block: 0.5rem; }
+.desktop-mode .brand, .desktop-mode .range-heading h2 { font-size: max(12px, 1.125rem); }
+.desktop-mode .date-jump input { width: max(120px, 9.125rem); }
 .desktop-mode:has(.desktop-move-handle) { padding-top: 2.125rem; }
 .desktop-move-handle { position: fixed; inset: 0 0 auto; width: 100%; height: 2.125rem; padding: 0 0.625rem; border: 0; background: #e0eadb; color: #396850; font-size: max(11px, 0.8125rem); cursor: move; touch-action: none; user-select: none; z-index: 12; }
 .desktop-resize-handle { position: fixed; right: 0; bottom: 0; width: 2.125rem; height: 2.125rem; border: 0; border-radius: 0.5rem 0 0; background: #d4e2cd; color: #396850; font-size: 1.375rem; cursor: nwse-resize; touch-action: none; user-select: none; z-index: 12; }

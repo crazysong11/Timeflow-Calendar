@@ -20,7 +20,7 @@ test("自动视野在不同窗口宽度下保持小时宽度和浏览锚点", ()
 
 test("界面缩放同步小时宽度，缩放前后保持浏览锚点与拖动时间换算", () => {
   const anchor = new Date("2027-01-02T10:15:00").getTime();
-  for (const scale of [0.75, 0.82, 0.9, 1]) {
+  for (const scale of [0.625, 0.6875, 0.75, 0.82, 0.875, 0.9, 1]) {
     for (const width of [560, 980, 1800, 2500]) {
       const span = viewSpan("auto", width, scale);
       const start = viewStart(anchor, span);

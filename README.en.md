@@ -22,7 +22,7 @@ Timeflow Calendar presents your schedule on a continuous timeline: 23:00 today s
 
 Version **1.0.0** provides continuous browsing, event editing, local persistence, and an adjustable desktop mode. Development continues through everyday use and community feedback.
 
-The development branch also scales text, controls, and event cards with the window, with minimum sizes for smaller windows. This improvement will be included in the next installer release.
+The development branch scales text, controls, and event cards with the window. Desktop panels use a more compact layout that continues shrinking down to the minimum panel size, while keeping text readable. These improvements will be included in the next installer release.
 
 ## Download and install
 

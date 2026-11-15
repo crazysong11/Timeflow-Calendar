@@ -23,15 +23,15 @@ Timeflow Calendar presents your schedule on a continuous timeline: 23:00 today s
 
 ## Current status
 
-Version **1.0.0** provides continuous browsing, event editing, local persistence, and an adjustable desktop mode. Development continues through everyday use and community feedback.
+Version **1.0.1** provides continuous browsing, event editing, local persistence, and an adjustable desktop mode. Development continues through everyday use and community feedback.
 
-The development branch adds window-adaptive sizing, draggable events and resize handles, an undo button, and completion controls in the context menu and event editor. Appearance settings offer light, dark, and system themes, interface sizing, and an optional event list in desktop mode. These improvements will be included in the next installer release.
+Version 1.0.1 adds window-adaptive sizing, draggable events and resize handles, an undo button, and completion controls in the context menu and event editor. Appearance settings offer light, dark, and system themes, interface sizing, and an optional event list in desktop mode.
 
 ## Download and install
 
-Download the [Windows x64 installer](https://github.com/crazysong11/Timeflow-Calendar/releases/download/v1.0.0/Timeflow-Calendar_1.0.0_x64-setup.exe) for Windows 10/11, run it, and follow the setup wizard. Launch **Timeflow Calendar** from the Start menu after installation. The installer supports Simplified Chinese and English; the app interface is currently in Simplified Chinese.
+Download the [Windows x64 installer](https://github.com/crazysong11/Timeflow-Calendar/releases/download/v1.0.1/Timeflow-Calendar_1.0.1_x64-setup.exe) for Windows 10/11, run it, and follow the setup wizard. Launch **Timeflow Calendar** from the Start menu after installation. The installer supports Simplified Chinese and English; the app interface is currently in Simplified Chinese.
 
-Setup installs for the current user and installs Microsoft WebView2 when needed; this step requires an internet connection. See the [1.0.0 release](https://github.com/crazysong11/Timeflow-Calendar/releases/tag/v1.0.0) for release notes, source code, and SHA-256 checksums. This release is unsigned. Installation and backup details are in the [usage guide](docs/usage.md).
+Setup installs for the current user and installs Microsoft WebView2 when needed; this step requires an internet connection. See the [1.0.1 release](https://github.com/crazysong11/Timeflow-Calendar/releases/tag/v1.0.1) for release notes, source code, and SHA-256 checksums. This release is unsigned. Installation and backup details are in the [usage guide](docs/usage.md).
 
 ## Basic use
 
@@ -101,15 +101,15 @@ Timeflow Calendar 用连续的时间轴呈现日程：今天的 23:00 与明天�
 
 ## 当前状态
 
-**1.0.0** 已提供连续浏览、事项编辑、本地保存和可调整布局的桌面模式。后续结合日常使用和社区反馈完善交互体验。
+**1.0.1** 已提供连续浏览、事项编辑、本地保存和可调整布局的桌面模式。后续结合日常使用和社区反馈完善交互体验。
 
-开发分支已加入随窗口缩放的紧凑布局、事项拖动与边缘调整、撤销按钮，以及右键菜单和编辑窗口中的完成标记。外观设置支持浅色、深色、跟随系统、界面大小调整和桌面事项列表开关。这些改进将随下一版安装包提供。
+1.0.1 新增随窗口缩放的紧凑布局、事项拖动与边缘调整、撤销按钮，以及右键菜单和编辑窗口中的完成标记。外观设置支持浅色、深色、跟随系统、界面大小调整和桌面事项列表开关。
 
 ## 下载安装
 
-下载适用于 Windows 10/11 的 [64 位安装包](https://github.com/crazysong11/Timeflow-Calendar/releases/download/v1.0.0/Timeflow-Calendar_1.0.0_x64-setup.exe)，运行后按向导安装，从开始菜单打开 **Timeflow Calendar**。安装向导支持简体中文和英文，应用界面目前使用简体中文。
+下载适用于 Windows 10/11 的 [64 位安装包](https://github.com/crazysong11/Timeflow-Calendar/releases/download/v1.0.1/Timeflow-Calendar_1.0.1_x64-setup.exe)，运行后按向导安装，从开始菜单打开 **Timeflow Calendar**。安装向导支持简体中文和英文，应用界面目前使用简体中文。
 
-软件安装到当前用户目录；需要 WebView2 时，安装向导会联网安装。[1.0.0 发布页](https://github.com/crazysong11/Timeflow-Calendar/releases/tag/v1.0.0)提供更新说明、源码和 SHA-256 校验文件。本版安装包尚未进行代码签名。安装与备份详情见[使用指南](docs/usage.md)。
+软件安装到当前用户目录；需要 WebView2 时，安装向导会联网安装。[1.0.1 发布页](https://github.com/crazysong11/Timeflow-Calendar/releases/tag/v1.0.1)提供更新说明、源码和 SHA-256 校验文件。本版安装包尚未进行代码签名。安装与备份详情见[使用指南](docs/usage.md)。
 
 ## 基本用法
 

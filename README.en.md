@@ -20,15 +20,15 @@ Timeflow Calendar presents your schedule on a continuous timeline: 23:00 today s
 
 ## Current status
 
-Version **1.0.0** provides continuous browsing, event editing, local persistence, and an adjustable desktop mode. Development continues through everyday use and community feedback.
+Version **1.0.1** provides continuous browsing, event editing, local persistence, and an adjustable desktop mode. Development continues through everyday use and community feedback.
 
-The development branch adds window-adaptive sizing, draggable events and resize handles, an undo button, and completion controls in the context menu and event editor. Appearance settings offer light, dark, and system themes, interface sizing, and an optional event list in desktop mode. These improvements will be included in the next installer release.
+Version 1.0.1 adds window-adaptive sizing, draggable events and resize handles, an undo button, and completion controls in the context menu and event editor. Appearance settings offer light, dark, and system themes, interface sizing, and an optional event list in desktop mode.
 
 ## Download and install
 
-Download the [Windows x64 installer](https://github.com/crazysong11/Timeflow-Calendar/releases/download/v1.0.0/Timeflow-Calendar_1.0.0_x64-setup.exe) for Windows 10/11, run it, and follow the setup wizard. Launch **Timeflow Calendar** from the Start menu after installation. The installer supports Simplified Chinese and English; the app interface is currently in Simplified Chinese.
+Download the [Windows x64 installer](https://github.com/crazysong11/Timeflow-Calendar/releases/download/v1.0.1/Timeflow-Calendar_1.0.1_x64-setup.exe) for Windows 10/11, run it, and follow the setup wizard. Launch **Timeflow Calendar** from the Start menu after installation. The installer supports Simplified Chinese and English; the app interface is currently in Simplified Chinese.
 
-Setup installs for the current user and installs Microsoft WebView2 when needed; this step requires an internet connection. See the [1.0.0 release](https://github.com/crazysong11/Timeflow-Calendar/releases/tag/v1.0.0) for release notes, source code, and SHA-256 checksums. This release is unsigned. Installation and backup details are in the [usage guide](docs/usage.md).
+Setup installs for the current user and installs Microsoft WebView2 when needed; this step requires an internet connection. See the [1.0.1 release](https://github.com/crazysong11/Timeflow-Calendar/releases/tag/v1.0.1) for release notes, source code, and SHA-256 checksums. This release is unsigned. Installation and backup details are in the [usage guide](docs/usage.md).
 
 ## Basic use
 

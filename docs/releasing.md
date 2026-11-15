@@ -2,9 +2,9 @@
 
 ## 版本与资源
 
-版本号同步写入 `package.json`、`package-lock.json`、`src-tauri/Cargo.toml`、`src-tauri/Cargo.lock` 和 `src-tauri/tauri.conf.json`。Git 标签使用 `v` 前缀，例如 `v1.0.0`。
+版本号同步写入 `package.json`、`package-lock.json`、`src-tauri/Cargo.toml`、`src-tauri/Cargo.lock` 和 `src-tauri/tauri.conf.json`。Git 标签使用 `v` 前缀，例如 `v1.0.1`。
 
-1.0.0 提供 Windows x64 的 NSIS 安装包，安装到当前用户目录。安装向导支持简体中文和英文，内置 WebView2 引导程序，需要安装运行时时联网下载。
+1.0.1 提供 Windows x64 的 NSIS 安装包，安装到当前用户目录。安装向导支持简体中文和英文，内置 WebView2 引导程序，需要安装运行时时联网下载。
 
 项目采用 GPL-3.0-only，完整正文在根目录 `LICENSE`。安装包内置 `LICENSE` 和 `THIRD_PARTY_NOTICES.txt`，托盘“关于”显示版本与对应源码地址。更新依赖后运行 `npm.cmd run notices` 重新生成第三方声明；补充许可证的来源见 [licenses](../licenses/README.md)。
 
@@ -33,11 +33,11 @@ powershell -NoProfile -ExecutionPolicy RemoteSigned -File scripts/test-single-in
 
 ## 发布到 GitHub
 
-1. 同步双语 README 的版本、下载入口和当前状态，在 `docs/releases/` 编写对应版本的中英文发布说明。
+1. 同步双语 README 的版本、下载入口和当前状态，在 `docs/releases/` 编写对应版本的中英文发布说明。后续版本只描述相较上一版的新增功能、改进和升级事项，附版本对比链接。
 2. 完成适用检查，检查远程更新，提交并推送发布代码。
 3. 在已验证提交上创建版本标签并推送。保留发布所用的构建产物。
 4. 将安装包命名为 `Timeflow-Calendar_<版本>_x64-setup.exe`，计算 SHA-256，写入 `SHA256SUMS.txt`。
 5. 创建 GitHub Release 草稿，关联对应标签，上传安装包和校验文件，核对大小与摘要后发布为正式版本。
 6. 验证公开下载与标签源码可访问，并核对下载文件摘要。GitHub 提供该标签对应的源码压缩包。
 
-安装包与校验文件存放在 Release 附件中；Git 仓库跟踪源代码、配置、文档和许可证。1.0.0 使用未签名安装包，发布说明中标明签名状态。
+安装包与校验文件存放在 Release 附件中；Git 仓库跟踪源代码、配置、文档和许可证。1.0.1 使用未签名安装包，发布说明中标明签名状态。

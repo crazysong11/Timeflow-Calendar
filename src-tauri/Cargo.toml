@@ -1,6 +1,6 @@
 [package]
 name = "timeflow-calendar"
-version = "1.0.0"
+version = "1.0.1"
 license = "GPL-3.0-only"
 description = "A continuous timeline calendar for Windows"
 edition = "2021"

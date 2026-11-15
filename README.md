@@ -29,7 +29,7 @@ An early working version is available to run from source. Continuous browsing, e
 
 1. Drag an empty part of the timeline to browse. The arrow buttons move half a screen; the left and right arrow keys move one hour when the timeline is focused.
 2. Double-click empty space or select **新建事项** (New event), then enter a title and start/end times. For an event spanning midnight, choose the following date for its end.
-3. Select a card or an item in the list below to edit it. Use **回到现在** (Back to now) to return to the current moment.
+3. Select a card or an item in the list below to edit it. Use **回到现在** (Back to now) to return to the current moment. Select a date and **前往** (Go) to align that day’s 00:00 with the left edge of the timeline.
 4. In the Windows app, select **贴到桌面** (Pin to desktop), then **调整布局** (Adjust layout). Drag the top handle to move it or the lower-right handle to resize it, and select **完成调整** (Finish adjusting) to lock the layout.
 
 The interface is currently in Simplified Chinese. See the [usage guide](docs/usage.md) (Chinese) for scrolling, storage, and backup details.
@@ -95,7 +95,7 @@ Timeflow Calendar 用连续的时间轴呈现日程：今天的 23:00 与明天�
 
 1. 拖动时间轴空白处浏览时间。左右箭头按钮移动半屏；聚焦时间轴后，键盘左右方向键每次移动一小时。
 2. 双击空白处或点击“新建事项”，填写标题和起止时间。跨午夜安排请选择次日的结束日期。
-3. 点击事项卡片或下方列表进行编辑，通过“回到现在”返回当前时刻。
+3. 点击事项卡片或下方列表进行编辑，通过“回到现在”返回当前时刻。选择日期并点击“前往”，将当天 00:00 对齐到时间轴左侧。
 4. Windows 应用点击“贴到桌面”，再开启“调整布局”。拖动顶部移动位置，拖动右下角调整大小，点击“完成调整”固定布局。
 
 滚轮操作、数据位置与备份方式见[使用指南](docs/usage.md)。

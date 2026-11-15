@@ -104,7 +104,7 @@ export default function App() {
               <button className="icon-button" aria-label="向过去浏览" title="向过去浏览半屏" onClick={() => setStart(start - span / 2)}>‹</button>
               <button className="icon-button" aria-label="向未来浏览" title="向未来浏览半屏" onClick={() => setStart(start + span / 2)}>›</button>
             </div>
-            <form className="date-jump" onSubmit={(e) => { e.preventDefault(); const target = parseLocalInput(jumpDate + "T08:00"); if (Number.isFinite(target)) setStart(target); }}>
+            <form className="date-jump" onSubmit={(e) => { e.preventDefault(); const target = parseLocalInput(jumpDate + "T00:00"); if (Number.isFinite(target)) setStart(target); }}>
               <label className="sr-only" htmlFor="jump-date">跳转日期</label>
               <input id="jump-date" type="date" value={jumpDate} required onInput={(e) => setJumpDate(e.currentTarget.value)} />
               <button className="text-button" type="submit">前往</button>

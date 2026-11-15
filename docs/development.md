@@ -112,7 +112,7 @@ npm.cmd run desktop:build
 npm.cmd run tauri -- build --debug --no-bundle -- --locked
 ```
 
-该命令将前端资源嵌入 src-tauri/target/debug/timeflow-calendar.exe，可用于验证独立启动。Tauri 的构建选项写在第二个 `--` 之前，Cargo 的 `--locked` 参数写在其后。
+该命令将前端资源嵌入 src-tauri/target/debug/timeflow-calendar.exe，可用于验证独立启动。Windows 下调试版与 Release 版均使用 GUI 子系统，直接运行 exe 时显示应用界面和托盘。开发命令在终端中执行，构建信息由开发终端输出。Tauri 的构建选项写在第二个 `--` 之前，Cargo 的 `--locked` 参数写在其后。
 
 ## 当前开发阶段
 
@@ -189,3 +189,13 @@ Vite 的监听范围排除了 src-tauri 与 work 目录，让前端热更新专�
 ```powershell
 cargo test --manifest-path src-tauri/Cargo.toml --locked --lib
 ```
+
+## 日期跳转与独立启动修正
+
+2026 年 11 月 15 日：
+
+- “前往”改为将选定日期的 00:00 对齐到时间轴左侧；浏览器界面验证零点刻度的位置为 `0px`。
+- Windows 入口统一使用 GUI 子系统，调试版与 Release 版独立启动均采用图形界面方式。
+- 8 项现有前端与存储测试、TypeScript 检查、前端生产构建和 Windows 调试版构建通过。
+- 读取生成 exe 的 PE 头，确认子系统为 `IMAGE_SUBSYSTEM_WINDOWS_GUI`（值 2），并启动新版应用。
+- 双语 README 与文档链接检查通过；安装包继续使用现有 NSIS 构建配置。

@@ -1,6 +1,6 @@
 # Timeflow Calendar
 
-[简体中文](README.md) | **English**
+[项目首页 / Project home](https://github.com/crazysong11/Timeflow-Calendar#readme)
 
 A continuous timeline calendar for Windows. Start planning from this moment.
 

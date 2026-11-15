@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { isTauri } from "@tauri-apps/api/core";
 import EventEditor from "./components/EventEditor";
 import Timeline from "./components/Timeline";
+import DesktopMode from "./components/DesktopMode";
 import { viewSpan, viewStart, type ViewMode } from "./lib/viewport";
 import { deleteEvent, listEvents, saveEvent } from "./lib/storage";
 import { HOUR, MINUTE, clockTime, dateInput, dateLabel, durationLabel, eventTime, inRange, parseLocalInput, type CalendarEvent } from "./lib/time";
@@ -10,6 +11,7 @@ const desktop = isTauri();
 
 export default function App() {
   const [now, setNow] = useState(Date.now);
+  const [pinned, setPinned] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("auto");
   const [width, setWidth] = useState(900);
   const [anchor, setAnchor] = useState(Date.now);
@@ -76,10 +78,13 @@ export default function App() {
   }
 
   return (
-    <main className="app-shell">
+    <main className={"app-shell" + (pinned ? " desktop-mode" : "")}>
       <header className="app-header">
         <div className="brand"><span className="brand-symbol" aria-hidden="true"><i /><i /><i /></span><span>Timeflow <b>Calendar</b></span></div>
-        <span className="storage-indicator"><i />{desktop ? "日程保存在此电脑" : "浏览器预览 · 数据保存在当前浏览器"}</span>
+        <div className="header-actions">
+          <span className="storage-indicator"><i />{pinned ? "已固定在桌面" : desktop ? "日程保存在此电脑" : "浏览器预览 · 数据保存在当前浏览器"}</span>
+          {desktop && <DesktopMode onChange={setPinned} onNotice={setNotice} />}
+        </div>
       </header>
       <section className="intro">
         <div><p className="eyebrow">MAKE ROOM FOR YOUR TIME</p><h1>从此刻，开始。</h1><p className="subtitle">时间一直向前，每一刻都可以是新的起点。</p></div>

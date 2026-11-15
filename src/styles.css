@@ -20,6 +20,23 @@ button { transition: background .15s, box-shadow .15s; }
 button:hover:not(:disabled) { filter: brightness(.97); }
 .app-shell { width: 100%; margin: auto; padding: 0 clamp(22px, 3vw, 56px) 24px; }
 .app-header { height: 78px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); gap: 16px; }
+.header-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 12px; }
+.desktop-controls { position: relative; display: flex; gap: 8px; }
+.desktop-toggle { white-space: nowrap; }
+.desktop-error { position: absolute; right: 0; top: calc(100% + 8px); width: min(360px, 80vw); padding: 12px; background: #fbede5; color: #a15844; border: 1px solid #ead8ca; border-radius: 8px; font-size: 13px; line-height: 1.6; z-index: 10; }
+.desktop-mode { padding: 0 18px 16px; }
+.desktop-mode .app-header { height: 60px; border: 0; }
+.desktop-mode .brand { font-size: 18px; }
+.desktop-mode .intro { display: none; }
+.desktop-mode .calendar { box-shadow: none; }
+.desktop-mode .app-footer { display: none; }
+.desktop-mode .agenda { margin-top: 18px; }
+.desktop-mode:has(.desktop-move-handle) { padding-top: 34px; }
+.desktop-move-handle { position: fixed; inset: 0 0 auto; width: 100%; height: 34px; padding: 0 10px; border: 0; background: #e0eadb; color: #396850; font-size: 13px; cursor: move; touch-action: none; user-select: none; z-index: 12; }
+.desktop-resize-handle { position: fixed; right: 0; bottom: 0; width: 34px; height: 34px; border: 0; border-radius: 8px 0 0; background: #d4e2cd; color: #396850; font-size: 22px; cursor: nwse-resize; touch-action: none; user-select: none; z-index: 12; }
+@media (max-width: 800px) {
+  .desktop-mode .app-header { height: auto; min-height: 60px; padding-block: 10px; flex-wrap: wrap; }
+}
 .brand { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 650; letter-spacing: -.5px; }
 .brand b { font-weight: 400; color: #839085; }
 .brand-symbol { width: 34px; height: 36px; display: flex; align-items: center; gap: 4px; transform: skew(-12deg); }

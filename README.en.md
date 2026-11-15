@@ -15,17 +15,19 @@ Timeflow Calendar presents your schedule on a continuous timeline: 23:00 today s
 - **Browse time continuously.** Drag or scroll through evenly spaced hourly markers, with date headers above the timeline.
 - **Schedule at any time.** Create, edit, and delete events with minute-level start and end times. Events spanning midnight stay together, and overlapping events appear on separate rows.
 - **Find your place.** Return to the current moment or jump to a date. The default automatic view fits the window; fixed 4-, 8-, 12-, and 24-hour views are also available.
+- **Keep it on your desktop.** Pin the calendar to the Windows desktop, move and resize it directly, and save its layout. A tray menu provides access to the regular window and exit action.
 - **Keep your schedule locally.** The Windows app saves events in SQLite and restores them when reopened. Events can include notes and a color.
 
 ## Current status
 
-An early working version is available to run from source. Continuous browsing, event editing, and local persistence are implemented. The next step is to refine the interactions through everyday use and prepare the first Windows release.
+An early working version is available to run from source. Continuous browsing, event editing, local persistence, and an adjustable desktop mode are implemented. The next step is to refine the interactions through everyday use and prepare the first Windows release.
 
 ## Basic use
 
 1. Drag an empty part of the timeline to browse. The arrow buttons move half a screen; the left and right arrow keys move one hour when the timeline is focused.
 2. Double-click empty space or select **新建事项** (New event), then enter a title and start/end times. For an event spanning midnight, choose the following date for its end.
 3. Select a card or an item in the list below to edit it. Use **回到现在** (Back to now) to return to the current moment.
+4. In the Windows app, select **贴到桌面** (Pin to desktop), then **调整布局** (Adjust layout). Drag the top handle to move it or the lower-right handle to resize it, and select **完成调整** (Finish adjusting) to lock the layout.
 
 The interface is currently in Simplified Chinese. See the [usage guide](docs/usage.md) (Chinese) for scrolling, storage, and backup details.
 
@@ -50,6 +52,7 @@ Project documentation is currently available in Chinese:
 - [Usage guide](docs/usage.md)
 - [Requirements and use cases](docs/requirements.md)
 - [Technical design](docs/technical-design.md)
+- [Desktop mode](docs/desktop-mode.md)
 - [Windows development guide](docs/development.md)
 
 Share use cases, interaction ideas, and bug reports through [Issues](https://github.com/crazysong11/Timeflow-Calendar/issues). Contributions to code, documentation, and translations are welcome through [Pull Requests](https://github.com/crazysong11/Timeflow-Calendar/pulls).

@@ -110,6 +110,8 @@ work/                   本地验证记录和临时文件
 
 前端通过限定职责的命令切换模式、开始调整、更新位移和完成调整。Rust 校验位移范围，将逻辑像素换算为物理像素，并将面板约束在显示器工作区内。实现与验收见[桌面模式设计](desktop-mode.md)。
 
+普通窗口和桌面面板采用独立布局记录，切换模式恢复目标布局，重启读取两套记录与当前模式。普通窗口通过 [Tauri WindowEvent](https://docs.rs/tauri/latest/tauri/enum.WindowEvent.html) 的移动、缩放事件更新位置和尺寸，并单独保存最大化状态；桌面调整完成时保存桌面布局。旧版 `bounds` 配置兼容读取为 `desktop_bounds`。
+
 ## 单实例启动
 
 使用 [Tauri 官方 Single Instance 插件](https://v2.tauri.app/plugin/single-instance/)，在插件列表首位注册，使重复启动在 SQLite、托盘和桌面布局初始化之前交由已有实例处理。Windows 实例标识来自 `app.timeflow.calendar`，由系统命名互斥量协调，退出后释放。

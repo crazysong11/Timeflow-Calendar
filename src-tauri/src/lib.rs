@@ -17,6 +17,7 @@ pub fn run() {
             desktop::finish_desktop_adjust
         ])
         .setup(desktop::setup)
+        .on_window_event(desktop::on_window_event)
         .plugin(
             tauri_plugin_sql::Builder::default()
                 .add_migrations(

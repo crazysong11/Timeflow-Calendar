@@ -13,7 +13,11 @@ pub struct Bounds {
 #[derive(Default, Serialize, Deserialize)]
 struct Preferences {
     enabled: bool,
-    bounds: Option<Bounds>,
+    normal_bounds: Option<Bounds>,
+    #[serde(default)]
+    normal_maximized: bool,
+    #[serde(alias = "bounds")]
+    desktop_bounds: Option<Bounds>,
 }
 
 #[derive(Clone, Serialize)]
@@ -28,6 +32,8 @@ pub struct DesktopState(Mutex<Session>);
 #[derive(Default)]
 struct Session {
     normal: Option<NativeSnapshot>,
+    layouts: Preferences,
+    initialized: bool,
     message: Option<String>,
     adjustment: Option<Adjustment>,
 }
@@ -74,11 +80,13 @@ impl Adjustment {
 pub fn begin_desktop_adjust(window: WebviewWindow, kind: AdjustKind) -> Result<(), String> {
     let state = window.state::<DesktopState>();
     let mut session = state.0.lock().map_err(|e| e.to_string())?;
+    if session.normal.is_none() {
+        return Err("请先切换到桌面模式。".into());
+    }
     let bounds = session
-        .normal
-        .as_ref()
-        .ok_or("请先切换到桌面模式。")?
-        .bounds;
+        .layouts
+        .desktop_bounds
+        .ok_or("请先切换到桌面模式。")?;
     session.adjustment = Some(Adjustment {
         kind,
         bounds,
@@ -97,9 +105,7 @@ pub fn update_desktop_adjust(window: WebviewWindow, dx: f64, dy: f64) -> Result<
     let gesture = session.adjustment.as_ref().ok_or("请先开启布局调整。")?;
     let bounds = gesture.apply(dx, dy);
     let actual = native::reposition(&window, bounds)?;
-    if let Some(snapshot) = session.normal.as_mut() {
-        snapshot.bounds = actual;
-    }
+    session.layouts.desktop_bounds = Some(actual);
     Ok(())
 }
 
@@ -108,20 +114,15 @@ pub fn finish_desktop_adjust(window: WebviewWindow) -> Result<(), String> {
     let state = window.state::<DesktopState>();
     let mut session = state.0.lock().map_err(|e| e.to_string())?;
     session.adjustment = None;
-    save_preferences(
-        window.app_handle(),
-        &Preferences {
-            enabled: session.normal.is_some(),
-            bounds: session.normal.as_ref().map(|s| s.bounds),
-        },
-    )
-    .map_err(|_| "位置已调整；偏好保存未完成，请再次调整后重试。".into())
+    save_preferences(window.app_handle(), &session.layouts)
+        .map_err(|_| "位置已调整；偏好保存未完成，请再次调整后重试。".into())
 }
 
 struct NativeSnapshot {
     style: isize,
     ex_style: isize,
     bounds: Bounds,
+    maximized: bool,
 }
 
 #[tauri::command]
@@ -174,39 +175,71 @@ fn save_preferences(app: &tauri::AppHandle, prefs: &Preferences) -> Result<(), S
 
 #[tauri::command]
 pub fn set_desktop_mode(window: WebviewWindow, enabled: bool) -> Result<DesktopStatus, String> {
-    change_mode(&window, enabled, None)
+    change_mode(&window, enabled)
 }
 
-fn change_mode(
-    window: &WebviewWindow,
-    enabled: bool,
-    initial_bounds: Option<Bounds>,
-) -> Result<DesktopStatus, String> {
+fn change_mode(window: &WebviewWindow, enabled: bool) -> Result<DesktopStatus, String> {
     let state = window.state::<DesktopState>();
     let mut session = state.0.lock().map_err(|e| e.to_string())?;
     if enabled != session.normal.is_some() {
         if enabled {
-            session.normal = Some(native::attach(window, initial_bounds)?);
+            let (snapshot, desktop_bounds) =
+                native::attach(window, session.layouts.desktop_bounds)?;
+            session.layouts.normal_bounds = Some(snapshot.bounds);
+            session.layouts.normal_maximized = snapshot.maximized;
+            session.layouts.desktop_bounds = Some(desktop_bounds);
+            session.normal = Some(snapshot);
         } else if let Some(snapshot) = session.normal.as_ref() {
             native::detach(window, snapshot)?;
             session.normal = None;
             session.adjustment = None;
         }
     }
-    let prefs = Preferences {
-        enabled: session.normal.is_some(),
-        bounds: session.normal.as_ref().map(|s| s.bounds),
-    };
-    session.message = save_preferences(window.app_handle(), &prefs)
+    session.layouts.enabled = session.normal.is_some();
+    session.message = save_preferences(window.app_handle(), &session.layouts)
         .err()
         .map(|_| "桌面模式已切换；偏好保存未完成，下次启动可重新选择。".to_string());
     let status = DesktopStatus {
-        enabled: prefs.enabled,
+        enabled: session.layouts.enabled,
         message: session.message.clone(),
     };
     drop(session);
     let _ = window.emit("desktop-mode-changed", &status);
     Ok(status)
+}
+
+// SetWindowPos/ShowWindow can synchronously reenter this callback while a mode
+// change holds the mutex. That transition records its final bounds itself.
+pub fn on_window_event(window: &tauri::Window, event: &tauri::WindowEvent) {
+    if window.label() != "main"
+        || !matches!(
+            event,
+            tauri::WindowEvent::Moved(_) | tauri::WindowEvent::Resized(_)
+        )
+    {
+        return;
+    }
+    let Some(state) = window.try_state::<DesktopState>() else {
+        return;
+    };
+    let Ok(mut session) = state.0.try_lock() else {
+        return;
+    };
+    if !session.initialized || session.normal.is_some() {
+        return;
+    }
+    let Some(main) = window.get_webview_window("main") else {
+        return;
+    };
+    let bounds = native::normal_bounds(&main).or(session.layouts.normal_bounds);
+    let maximized = native::normal_maximized(&main).unwrap_or(session.layouts.normal_maximized);
+    if session.layouts.normal_bounds != bounds || session.layouts.normal_maximized != maximized {
+        session.layouts.normal_bounds = bounds;
+        session.layouts.normal_maximized = maximized;
+        session.message = save_preferences(window.app_handle(), &session.layouts)
+            .err()
+            .map(|_| "窗口已调整；请再次移动或缩放以重试保存布局。".into());
+    }
 }
 
 pub fn setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
@@ -233,7 +266,7 @@ pub fn setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
                 return;
             }
             if let Some(window) = app.get_webview_window("main") {
-                let result = change_mode(&window, event.id.as_ref() == "pin", None);
+                let result = change_mode(&window, event.id.as_ref() == "pin");
                 if let Err(error) = result {
                     let state = app.state::<DesktopState>();
                     let mut session = state.0.lock().unwrap_or_else(|e| e.into_inner());
@@ -257,9 +290,21 @@ pub fn setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
         .and_then(|path| std::fs::read(path).ok())
         .and_then(|bytes| serde_json::from_slice::<Preferences>(&bytes).ok())
         .unwrap_or_default();
-    if prefs.enabled {
-        if let Some(window) = app.get_webview_window("main") {
-            if let Err(error) = change_mode(&window, true, prefs.bounds) {
+    let enabled = prefs.enabled;
+    if let Some(window) = app.get_webview_window("main") {
+        {
+            let state = app.state::<DesktopState>();
+            let mut session = state.0.lock().unwrap_or_else(|e| e.into_inner());
+            session.layouts = prefs;
+            if let Some(bounds) = session.layouts.normal_bounds {
+                native::restore_normal(&window, bounds, session.layouts.normal_maximized)?;
+            }
+            session.layouts.normal_bounds =
+                native::normal_bounds(&window).or(session.layouts.normal_bounds);
+            session.initialized = true;
+        }
+        if enabled {
+            if let Err(error) = change_mode(&window, true) {
                 app.state::<DesktopState>()
                     .0
                     .lock()
@@ -355,7 +400,7 @@ mod native {
     pub fn attach(
         window: &WebviewWindow,
         initial: Option<Bounds>,
-    ) -> Result<NativeSnapshot, String> {
+    ) -> Result<(NativeSnapshot, Bounds), String> {
         let hwnd = window.hwnd().map_err(|e| e.to_string())?.0 as HWND;
         unsafe {
             let mut host: HWND = null_mut();
@@ -363,21 +408,24 @@ mod native {
             if host.is_null() {
                 return Err("正在等待 Windows 桌面就绪，请稍后再次选择“贴到桌面”。".into());
             }
+            let maximized = IsZoomed(hwnd) != 0;
             ShowWindow(hwnd, SW_RESTORE);
             let mut rect: RECT = std::mem::zeroed();
             if GetWindowRect(hwnd, &mut rect) == 0 {
                 return Err(error("读取窗口位置"));
             }
-            let bounds = fit_bounds(initial.unwrap_or(Bounds {
+            let normal_bounds = Bounds {
                 x: rect.left,
                 y: rect.top,
                 width: rect.right - rect.left,
                 height: rect.bottom - rect.top,
-            }));
+            };
+            let bounds = fit_bounds(initial.unwrap_or(normal_bounds));
             let snapshot = NativeSnapshot {
                 style: GetWindowLongPtrW(hwnd, GWL_STYLE),
                 ex_style: GetWindowLongPtrW(hwnd, GWL_EXSTYLE),
-                bounds,
+                bounds: normal_bounds,
+                maximized,
             };
             let style = (snapshot.style as u32
                 & !(WS_POPUP
@@ -420,8 +468,60 @@ mod native {
                 let _ = detach(window, &snapshot);
                 return Err(error);
             }
-            Ok(snapshot)
+            Ok((snapshot, bounds))
         }
+    }
+
+    pub fn normal_bounds(window: &WebviewWindow) -> Option<Bounds> {
+        let hwnd = window.hwnd().ok()?.0 as HWND;
+        unsafe {
+            // Keep the last restored rectangle when Windows minimizes or maximizes.
+            if IsIconic(hwnd) != 0 || IsZoomed(hwnd) != 0 {
+                return None;
+            }
+            let mut rect: RECT = std::mem::zeroed();
+            if GetWindowRect(hwnd, &mut rect) == 0 {
+                return None;
+            }
+            Some(Bounds {
+                x: rect.left,
+                y: rect.top,
+                width: rect.right - rect.left,
+                height: rect.bottom - rect.top,
+            })
+        }
+    }
+
+    pub fn normal_maximized(window: &WebviewWindow) -> Option<bool> {
+        let hwnd = window.hwnd().ok()?.0 as HWND;
+        unsafe { (IsIconic(hwnd) == 0).then(|| IsZoomed(hwnd) != 0) }
+    }
+
+    pub fn restore_normal(
+        window: &WebviewWindow,
+        bounds: Bounds,
+        maximized: bool,
+    ) -> Result<(), String> {
+        let hwnd = window.hwnd().map_err(|e| e.to_string())?.0 as HWND;
+        unsafe {
+            let bounds = fit_bounds(bounds);
+            if SetWindowPos(
+                hwnd,
+                HWND_TOP,
+                bounds.x,
+                bounds.y,
+                bounds.width,
+                bounds.height,
+                SWP_NOACTIVATE,
+            ) == 0
+            {
+                return Err(error("恢复普通窗口布局"));
+            }
+            if maximized {
+                ShowWindow(hwnd, SW_MAXIMIZE);
+            }
+        }
+        Ok(())
     }
 
     pub fn detach(window: &WebviewWindow, snapshot: &NativeSnapshot) -> Result<(), String> {
@@ -443,7 +543,14 @@ mod native {
             {
                 return Err(error("恢复窗口"));
             }
-            ShowWindow(hwnd, SW_RESTORE);
+            ShowWindow(
+                hwnd,
+                if snapshot.maximized {
+                    SW_MAXIMIZE
+                } else {
+                    SW_RESTORE
+                },
+            );
         }
         window.set_focus().map_err(|e| e.to_string())
     }
@@ -484,7 +591,10 @@ mod native {
 mod native {
     use super::{Bounds, NativeSnapshot};
     use tauri::WebviewWindow;
-    pub fn attach(_: &WebviewWindow, _: Option<Bounds>) -> Result<NativeSnapshot, String> {
+    pub fn attach(
+        _: &WebviewWindow,
+        _: Option<Bounds>,
+    ) -> Result<(NativeSnapshot, Bounds), String> {
         Err("桌面模式适用于 Windows。".into())
     }
     pub fn detach(_: &WebviewWindow, _: &NativeSnapshot) -> Result<(), String> {
@@ -492,6 +602,15 @@ mod native {
     }
     pub fn reposition(_: &WebviewWindow, _: Bounds) -> Result<Bounds, String> {
         Err("桌面模式适用于 Windows。".into())
+    }
+    pub fn normal_bounds(_: &WebviewWindow) -> Option<Bounds> {
+        None
+    }
+    pub fn normal_maximized(_: &WebviewWindow) -> Option<bool> {
+        None
+    }
+    pub fn restore_normal(_: &WebviewWindow, _: Bounds, _: bool) -> Result<(), String> {
+        Ok(())
     }
 }
 
@@ -509,6 +628,63 @@ fn fit_in_work_area(bounds: Bounds, work: Bounds) -> Bounds {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn existing_desktop_preferences_keep_the_saved_layout() {
+        let prefs: Preferences = serde_json::from_str(
+            r#"{"enabled":true,"bounds":{"x":2124,"y":330,"width":1028,"height":786}}"#,
+        )
+        .unwrap();
+        assert!(prefs.enabled);
+        assert_eq!(prefs.normal_bounds, None);
+        assert_eq!(
+            prefs.desktop_bounds,
+            Some(Bounds {
+                x: 2124,
+                y: 330,
+                width: 1028,
+                height: 786,
+            })
+        );
+        let saved = serde_json::to_value(&prefs).unwrap();
+        assert!(saved.get("bounds").is_none());
+        assert_eq!(saved["desktop_bounds"]["x"], 2124);
+        let normal: Preferences =
+            serde_json::from_str(r#"{"enabled":false,"bounds":null}"#).unwrap();
+        assert!(!normal.enabled);
+        assert_eq!(normal.normal_bounds, None);
+        assert_eq!(normal.desktop_bounds, None);
+    }
+
+    #[test]
+    fn both_layouts_survive_saving_in_either_mode() {
+        let normal = Bounds {
+            x: 100,
+            y: 200,
+            width: 1650,
+            height: 1080,
+        };
+        let desktop = Bounds {
+            x: 2124,
+            y: 330,
+            width: 1028,
+            height: 786,
+        };
+        for enabled in [false, true] {
+            let prefs = Preferences {
+                enabled,
+                normal_bounds: Some(normal),
+                normal_maximized: enabled,
+                desktop_bounds: Some(desktop),
+            };
+            let loaded: Preferences =
+                serde_json::from_slice(&serde_json::to_vec(&prefs).unwrap()).unwrap();
+            assert_eq!(loaded.enabled, enabled);
+            assert_eq!(loaded.normal_bounds, Some(normal));
+            assert_eq!(loaded.normal_maximized, enabled);
+            assert_eq!(loaded.desktop_bounds, Some(desktop));
+        }
+    }
 
     #[test]
     fn movement_uses_dpi_scale_and_preserves_size() {

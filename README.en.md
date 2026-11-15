@@ -31,6 +31,8 @@ An early working version is available to run from source. Continuous browsing, e
 
 Opening the Windows app again reuses the running instance. Regular windows are brought forward; pinned calendars keep their desktop layout.
 
+Regular and pinned windows remember their own position and size. Switching modes restores the corresponding layout, and both are preserved after restarting.
+
 The interface is currently in Simplified Chinese. See the [usage guide](docs/usage.md) (Chinese) for scrolling, storage, and backup details.
 
 ## Run from source

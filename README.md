@@ -34,6 +34,8 @@ An early working version is available to run from source. Continuous browsing, e
 
 Opening the Windows app again reuses the running instance. Regular windows are brought forward; pinned calendars keep their desktop layout.
 
+Regular and pinned windows remember their own position and size. Switching modes restores the corresponding layout, and both are preserved after restarting.
+
 The interface is currently in Simplified Chinese. See the [usage guide](docs/usage.md) (Chinese) for scrolling, storage, and backup details.
 
 ## Run from source
@@ -101,6 +103,8 @@ Timeflow Calendar 用连续的时间轴呈现日程：今天的 23:00 与明天�
 4. Windows 应用点击“贴到桌面”，再开启“调整布局”。拖动顶部移动位置，拖动右下角调整大小，点击“完成调整”固定布局。
 
 再次打开 Windows 应用会复用已运行的实例：普通窗口会被唤回，桌面模式保持原有布局。
+
+普通窗口和桌面面板分别记住位置与大小，切换时自动恢复对应布局，重新启动后继续保留。
 
 滚轮操作、数据位置与备份方式见[使用指南](docs/usage.md)。
 

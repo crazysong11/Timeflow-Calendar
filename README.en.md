@@ -20,7 +20,13 @@ Timeflow Calendar presents your schedule on a continuous timeline: 23:00 today s
 
 ## Current status
 
-An early working version is available to run from source. Continuous browsing, event editing, local persistence, and an adjustable desktop mode are implemented. The next step is to refine the interactions through everyday use and prepare the first Windows release.
+Version **1.0.0** provides continuous browsing, event editing, local persistence, and an adjustable desktop mode. Development continues through everyday use and community feedback.
+
+## Download and install
+
+Download the [Windows x64 installer](https://github.com/crazysong11/Timeflow-Calendar/releases/download/v1.0.0/Timeflow-Calendar_1.0.0_x64-setup.exe) for Windows 10/11, run it, and follow the setup wizard. Launch **Timeflow Calendar** from the Start menu after installation. The installer supports Simplified Chinese and English; the app interface is currently in Simplified Chinese.
+
+Setup installs for the current user and installs Microsoft WebView2 when needed; this step requires an internet connection. See the [1.0.0 release](https://github.com/crazysong11/Timeflow-Calendar/releases/tag/v1.0.0) for release notes, source code, and SHA-256 checksums. This release is unsigned. Installation and backup details are in the [usage guide](docs/usage.md).
 
 ## Basic use
 
@@ -65,4 +71,4 @@ For bug reports, include reproduction steps and the expected and actual behavior
 
 ## License
 
-License selection is pending. The chosen license will be published in the repository's root `LICENSE` file before the first release.
+Copyright © 2026 crazysong11. Licensed under [GNU GPL v3.0](LICENSE) (`GPL-3.0-only`). Third-party components retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.txt).

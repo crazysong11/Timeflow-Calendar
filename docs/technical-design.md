@@ -106,6 +106,8 @@ work/                   本地验证记录和临时文件
 
 ## Windows 桌面集成
 
+正式分发使用 Tauri 的 NSIS 安装包，包含 Windows x64 Release 程序、GPL-3.0 许可证与第三方声明；安装与发布流程见[版本发布指南](releasing.md)。
+
 桌面模式使用 `windows-sys` 调用 Windows 窗口 API，由 Rust 管理桌面宿主挂接、恢复和位置尺寸。Tauri 内置托盘提供常驻入口，`serde` 与 `serde_json` 保存模式和布局；日程仍由 SQLite 管理。
 
 前端通过限定职责的命令切换模式、开始调整、更新位移和完成调整。Rust 校验位移范围，将逻辑像素换算为物理像素，并将面板约束在显示器工作区内。实现与验收见[桌面模式设计](desktop-mode.md)。

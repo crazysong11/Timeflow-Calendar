@@ -243,7 +243,7 @@ pub fn on_window_event(window: &tauri::Window, event: &tauri::WindowEvent) {
 }
 
 pub fn setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
-    use tauri::menu::{Menu, MenuItem};
+    use tauri::menu::{AboutMetadata, Menu, MenuItem, PredefinedMenuItem};
     use tauri::tray::TrayIconBuilder;
 
     let restore = MenuItem::with_id(
@@ -255,7 +255,16 @@ pub fn setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     )?;
     let pin = MenuItem::with_id(app, "pin", "贴到桌面", true, None::<&str>)?;
     let exit = MenuItem::with_id(app, "exit", "退出 Timeflow Calendar", true, None::<&str>)?;
-    let menu = Menu::with_items(app, &[&restore, &pin, &exit])?;
+    let about = PredefinedMenuItem::about(app, Some("关于 Timeflow Calendar"), Some(AboutMetadata {
+        name: Some("Timeflow Calendar".into()),
+        version: Some(env!("CARGO_PKG_VERSION").into()),
+        copyright: Some("Copyright © 2026 crazysong11".into()),
+        license: Some("GNU GPL v3.0 (GPL-3.0-only)\n可按 GPL v3 使用、修改和分发。本软件按现状提供，不附带担保。\n完整许可证与第三方声明见安装目录中的 LICENSE 和 THIRD_PARTY_NOTICES.txt。".into()),
+        website: Some(format!("https://github.com/crazysong11/Timeflow-Calendar/tree/v{}", env!("CARGO_PKG_VERSION"))),
+        website_label: Some("对应版本源码".into()),
+        ..Default::default()
+    }))?;
+    let menu = Menu::with_items(app, &[&restore, &pin, &about, &exit])?;
     let mut tray = TrayIconBuilder::with_id("timeflow")
         .tooltip("Timeflow Calendar")
         .menu(&menu)
@@ -263,6 +272,9 @@ pub fn setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
         .on_menu_event(|app, event| {
             if event.id.as_ref() == "exit" {
                 app.exit(0);
+                return;
+            }
+            if !matches!(event.id.as_ref(), "restore" | "pin") {
                 return;
             }
             if let Some(window) = app.get_webview_window("main") {

@@ -1,6 +1,18 @@
 # Timeflow Calendar 使用指南
 
-第一版提供连续时间轴、事项管理和本地保存。启动方式见 [Windows 开发指南](development.md)。
+1.0.0 提供连续时间轴、事项管理和本地保存。
+
+## 安装与更新
+
+1. 在 [GitHub Releases](https://github.com/crazysong11/Timeflow-Calendar/releases/tag/v1.0.0) 下载 `Timeflow-Calendar_1.0.0_x64-setup.exe`，适用于 Windows 10/11 的 x64 电脑。
+2. 运行安装包，选择安装语言并按向导完成安装。默认位置为 `%LOCALAPPDATA%\Timeflow Calendar`，开始菜单提供启动入口。
+3. 从开始菜单打开 Timeflow Calendar。安装向导支持简体中文和英文，应用界面目前使用简体中文。
+
+应用使用 Microsoft WebView2；安装向导会检测已有运行时，并在需要时联网安装。本版安装包尚未进行代码签名。发布页同时提供 `SHA256SUMS.txt`，可使用 PowerShell 的 `Get-FileHash -Algorithm SHA256` 比对安装包。
+
+更新时先通过托盘退出应用，再运行新版安装包。日程与窗口偏好保存在独立的用户数据目录。卸载入口位于 Windows 设置的“已安装的应用”；保留“删除应用数据”选项为未勾选状态，即可保留日程和布局。
+
+托盘“关于 Timeflow Calendar”显示版本、许可证与对应源码地址。安装目录中的 `LICENSE` 和 `THIRD_PARTY_NOTICES.txt` 提供完整许可文本。源码运行方式见 [Windows 开发指南](development.md)。
 
 ## 打开应用
 

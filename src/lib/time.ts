@@ -10,6 +10,7 @@ export interface CalendarEvent {
   color: string;
   createdAt: number;
   updatedAt: number;
+  completed?: boolean;
 }
 
 export const COLORS = ["sage", "blue", "peach", "lavender"] as const;

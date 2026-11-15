@@ -25,7 +25,7 @@ Timeflow Calendar presents your schedule on a continuous timeline: 23:00 today s
 
 Version **1.0.0** provides continuous browsing, event editing, local persistence, and an adjustable desktop mode. Development continues through everyday use and community feedback.
 
-The development branch scales text, controls, and event cards with the window. Desktop panels use a more compact layout that continues shrinking down to the minimum panel size, while keeping text readable. These improvements will be included in the next installer release.
+The development branch adds window-adaptive sizing, draggable events and resize handles, an undo button, and completion controls in the context menu and event editor. Appearance settings offer light, dark, and system themes, interface sizing, and an optional event list in desktop mode. These improvements will be included in the next installer release.
 
 ## Download and install
 
@@ -103,7 +103,7 @@ Timeflow Calendar 用连续的时间轴呈现日程：今天的 23:00 与明天�
 
 **1.0.0** 已提供连续浏览、事项编辑、本地保存和可调整布局的桌面模式。后续结合日常使用和社区反馈完善交互体验。
 
-开发分支已加入字号、控件和事项卡片随窗口缩放的适配。固定到桌面后采用更紧凑的布局，接近最小面板尺寸时才停止缩小，并保留清晰的文字。这些改进将随下一版安装包提供。
+开发分支已加入随窗口缩放的紧凑布局、事项拖动与边缘调整、撤销按钮，以及右键菜单和编辑窗口中的完成标记。外观设置支持浅色、深色、跟随系统、界面大小调整和桌面事项列表开关。这些改进将随下一版安装包提供。
 
 ## 下载安装
 

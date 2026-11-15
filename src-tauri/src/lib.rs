@@ -22,12 +22,20 @@ pub fn run() {
             tauri_plugin_sql::Builder::default()
                 .add_migrations(
                     "sqlite:timeflow.db",
-                    vec![Migration {
-                        version: 1,
-                        description: "create_events",
-                        sql: include_str!("../migrations/001_events.sql"),
-                        kind: MigrationKind::Up,
-                    }],
+                    vec![
+                        Migration {
+                            version: 1,
+                            description: "create_events",
+                            sql: include_str!("../migrations/001_events.sql"),
+                            kind: MigrationKind::Up,
+                        },
+                        Migration {
+                            version: 2,
+                            description: "event_completion",
+                            sql: include_str!("../migrations/002_completed.sql"),
+                            kind: MigrationKind::Up,
+                        },
+                    ],
                 )
                 .build(),
         )

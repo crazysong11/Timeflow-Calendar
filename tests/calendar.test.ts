@@ -80,6 +80,10 @@ test("SQLite 实际迁移、跨天查询、编辑与删除在重新打开后保�
   const bind = (values: (string | number)[]) => Object.fromEntries(values.map((value, index) => ["$" + (index + 1), value]));
   try {
     db.exec(readFileSync(new URL("../src-tauri/migrations/001_events.sql", import.meta.url), "utf8"));
+    db.exec("INSERT INTO events VALUES ('legacy','旧事项',1,2,'','sage',1,1)");
+    db.exec(readFileSync(new URL("../src-tauri/migrations/002_completed.sql", import.meta.url), "utf8"));
+    assert.equal(db.prepare("SELECT completed FROM events WHERE id='legacy'").get()?.completed, 0);
+    db.exec("DELETE FROM events WHERE id='legacy'");
     const start = instant("2026-12-31T23:30:00");
     const item = { ...event("across-midnight", start, start + HOUR), title: "阅读 ' SQL 文本", notes: "跨年安排" };
     db.prepare(SAVE_EVENT).run(bind(eventValues(item)));
@@ -90,12 +94,13 @@ test("SQLite 实际迁移、跨天查询、编辑与删除在重新打开后保�
     assert.equal(rows[0].title, item.title);
     assert.equal(rows[0].end, item.end);
     assert.equal(db.prepare(SELECT_EVENTS).all(bind([start + 2 * HOUR, start + HOUR])).length, 0);
-    const updated = { ...item, title: "修改后的事项", end: start + 2 * HOUR, updatedAt: 2 };
+    const updated = { ...item, title: "修改后的事项", end: start + 2 * HOUR, completed: true, updatedAt: 2 };
     db.prepare(SAVE_EVENT).run(bind(eventValues(updated)));
     assert.throws(() => db.prepare(SAVE_EVENT).run(bind(eventValues({ ...item, id: "invalid", end: start }))));
     db.close();
     db = new DatabaseSync(path);
     assert.equal(db.prepare(SELECT_EVENTS).all(bind([start + 3 * HOUR, start]))[0].title, updated.title);
+    assert.equal(db.prepare(SELECT_EVENTS).all(bind([start + 3 * HOUR, start]))[0].completed, 1);
     assert.equal(db.prepare("SELECT COUNT(*) AS count FROM events").get()?.count, 1);
     db.prepare(DELETE_EVENT).run({ $1: item.id });
     db.close();
@@ -118,7 +123,9 @@ test("浏览器预览保存独立，损坏数据和写入失败不会被静默�
     const item = event("preview", 1000, 2000);
     await saveEvent(item);
     assert.equal((await listEvents(1200, 1800)).length, 1);
-    await saveEvent({ ...item, title: "已修改" });
+    assert.equal((await listEvents(1200, 1800))[0].completed, false);
+    await saveEvent({ ...item, title: "已修改", completed: true });
+    assert.equal((await listEvents(1200, 1800))[0].completed, true);
     assert.equal((await listEvents(1200, 1800))[0].title, "已修改");
     localStorage.setItem = () => { throw new Error("QuotaExceededError"); };
     await assert.rejects(saveEvent({ ...item, title: "写入失败" }));

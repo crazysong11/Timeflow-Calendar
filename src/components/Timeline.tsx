@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type PointerEvent, type MouseEvent } from "react";
+import EventCard from "./EventCard";
 import { HOUR, MINUTE, clockTime, dateInput, dateLabel, dateSegments, eventTime, hourTicks, layoutEvents, timeToX, xToTime, type CalendarEvent } from "../lib/time";
 
 interface Props {
@@ -8,9 +9,12 @@ interface Props {
   onBrowse: (start: number) => void;
   onCreate: (time: number) => void;
   onEdit: (event: CalendarEvent) => void;
+  busy: boolean;
+  onChange: (event: CalendarEvent) => Promise<void>;
+  onContextMenu: (e: MouseEvent<HTMLElement>, event: CalendarEvent) => void;
 }
 
-export default function Timeline({ start, span, now, width, uiScale, onWidthChange, events, loading, onBrowse, onCreate, onEdit }: Props) {
+export default function Timeline({ start, span, now, width, uiScale, onWidthChange, events, loading, onBrowse, onCreate, onEdit, busy, onChange, onContextMenu }: Props) {
   const surface = useRef<HTMLDivElement>(null);
   const drag = useRef<{ id: number; x: number; start: number; moved: boolean } | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -20,7 +24,6 @@ export default function Timeline({ start, span, now, width, uiScale, onWidthChan
   const dates = useMemo(() => dateSegments(start, end), [start, end]);
   const layout = useMemo(() => layoutEvents(events), [events]);
   const lanes = Math.max(2, ...layout.map(({ lane }) => lane + 1));
-  const height = 124 + lanes * 96;
   const x = (time: number) => timeToX(time, start, span, width);
   const nowX = x(now);
   const labelStep = Math.max(1, Math.ceil(Math.max(50, 62 * uiScale) / (width / (span / HOUR))));
@@ -36,6 +39,7 @@ export default function Timeline({ start, span, now, width, uiScale, onWidthChan
   useEffect(() => {
     const element = surface.current!;
     const wheel = (e: WheelEvent) => {
+      if (element.querySelector(".event-adjusting")) { e.preventDefault(); return; }
       if (e.ctrlKey || e.metaKey) return;
       const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
       // Keep vertical scrolling available when overlapping events need more rows.
@@ -96,7 +100,7 @@ export default function Timeline({ start, span, now, width, uiScale, onWidthChan
         const time = xToTime(e.clientX - bounds.left, start, span, width);
         onCreate(Math.round(time / (5 * MINUTE)) * 5 * MINUTE);
       }}>
-      <div className="timeline-canvas" style={{ minHeight: `${height / 16}rem` }}>
+      <div className="timeline-canvas" style={{ minHeight: `calc(7.75rem + ${lanes} * var(--event-row))` }}>
         <div className="elapsed-shade" style={{ width: Math.max(0, Math.min(width, nowX)) }} />
         {dates.map((segment) => <div className="date-band" key={segment.date} style={{ left: x(segment.start), width: x(segment.end) - x(segment.start) }}>
           <span title={dateInput(segment.date)}>{dateInput(segment.date) === dateInput(now) && <b>今天</b>}{dateLabel(segment.date)}</span>
@@ -106,20 +110,8 @@ export default function Timeline({ start, span, now, width, uiScale, onWidthChan
         </div>)}
         {ticks.filter((tick) => tick + HOUR / 2 < end).map((tick) => <div key={tick} className="half-tick" style={{ left: x(tick + HOUR / 2) }} />)}
         {hover !== null && !dragging && <div className="hover-line" style={{ left: Math.min(width - 1, Math.max(0, x(hover))) }}><span>{clockTime(hover)}</span></div>}
-        {layout.map(({ event, lane }) => {
-          const left = Math.max(0, x(event.start));
-          const right = Math.min(width, x(event.end));
-          const clippedStart = event.start < start;
-          const clippedEnd = event.end > end;
-          return <button key={event.id} className={"timeline-event " + event.color + (right - left < 50 * uiScale ? " compact-event" : "") + (clippedStart ? " continues-before" : "") + (clippedEnd ? " continues-after" : "")}
-            style={{ left, width: Math.max(2, right - left), top: `${(116 + lane * 96) / 16}rem` }}
-            title={event.title + "\n" + dateInput(event.start) + " " + eventTime(event) + (event.notes ? "\n" + event.notes : "")}
-            aria-label={"编辑 " + event.title + "，" + eventTime(event)}
-            onClick={() => onEdit(event)}>
-            <strong>{clippedStart ? "← " : ""}{event.title}{clippedEnd ? " →" : ""}</strong>
-            <span>{eventTime(event)}</span>
-          </button>;
-        })}
+        {layout.map(({ event, lane }) => <EventCard key={event.id} event={event} lane={lane} start={start} span={span} width={width} uiScale={uiScale}
+          disabled={busy || loading} onEdit={onEdit} onChange={onChange} onContextMenu={onContextMenu} />)}
         {!events.length && !loading && <div className="timeline-empty">
           <span className="empty-mark" aria-hidden="true">＋</span>
           <p>把接下来的时间，留给想做的事</p><span>双击空白处，安排第一件事</span>

@@ -18,6 +18,7 @@ export default function EventEditor({ event, start, onSave, onDelete, onClose }:
   const [to, setTo] = useState(localInput(event?.end ?? start + HOUR));
   const [notes, setNotes] = useState(event?.notes ?? "");
   const [color, setColor] = useState(event?.color ?? "sage");
+  const [completed, setCompleted] = useState(event?.completed ?? false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [deleting, setDeleting] = useState(false);
@@ -38,7 +39,7 @@ export default function EventEditor({ event, start, onSave, onDelete, onClose }:
     const current = Date.now();
     const next: CalendarEvent = {
       id: event?.id ?? crypto.randomUUID(), title: title.trim(), start: fromTime, end: toTime,
-      notes, color, createdAt: event?.createdAt ?? current, updatedAt: current,
+      notes, color, completed, createdAt: event?.createdAt ?? current, updatedAt: current,
     };
     const validation = validateEvent(next);
     if (validation) { setError(validation); return; }
@@ -82,6 +83,7 @@ export default function EventEditor({ event, start, onSave, onDelete, onClose }:
         </header>
         <fieldset disabled={busy} className="editor-fields">
           <label>事项名称<input ref={titleInput} autoFocus required maxLength={120} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="想把这段时间留给什么？" /></label>
+          <label className="completion-control"><input type="checkbox" checked={completed} onChange={(e) => setCompleted(e.target.checked)} />已完成</label>
           <div className="time-fields">
             <label>开始时间<input type="datetime-local" required step={60} value={from} onInput={(e) => setFrom(e.currentTarget.value)} /></label>
             <label>结束时间<input type="datetime-local" required step={60} value={to} onInput={(e) => setTo(e.currentTarget.value)} /></label>

@@ -7,19 +7,30 @@
 
 A continuous timeline calendar for Windows. Start planning from this moment.
 
+![Timeflow Calendar showing events across midnight](docs/images/timeline.jpg)
+
+*Screenshot of the running browser preview with example events. The Windows app uses the same interface.*
+
 ## The idea
 
-Timeflow Calendar explores a continuous view of your schedule: 23:00 today sits naturally next to 00:00 tomorrow. Even when part of the morning has passed, the time ahead is still yours to use.
+Timeflow Calendar presents your schedule on a continuous timeline: 23:00 today sits naturally next to 00:00 tomorrow. Even when part of the morning has passed, the time ahead is still yours to use.
 
-The design centers on three ideas:
-
-- **Browse time continuously.** Drag or scroll left and right, with evenly spaced hourly markers across midnight.
-- **Schedule at any time.** Place events within an hour or across several hours, keeping events that span midnight together.
-- **Keep dates in view.** Date headers show which day each part of the timeline belongs to.
+- **Browse time continuously.** Drag or scroll through evenly spaced hourly markers, with date headers above the timeline.
+- **Schedule at any time.** Create, edit, and delete events with minute-level start and end times. Events spanning midnight stay together, and overlapping events appear on separate rows.
+- **Find your place.** Return to the current moment, jump to a date, or switch between 4-, 8-, 12-, and 24-hour views.
+- **Keep your schedule locally.** The Windows app saves events in SQLite and restores them when reopened. Events can include notes and a color.
 
 ## Current status
 
-Timeflow Calendar is in early development. The Windows app currently opens a welcome screen; the timeline and scheduling features described above are planned. The next step is an interactive prototype to explore navigation, date headers, and event layouts.
+An early working version is available to run from source. Continuous browsing, event editing, and local persistence are implemented. The next step is to refine the interactions through everyday use and prepare the first Windows release.
+
+## Basic use
+
+1. Drag an empty part of the timeline to browse. The arrow buttons move half a screen; the left and right arrow keys move one hour when the timeline is focused.
+2. Double-click empty space or select **新建事项** (New event), then enter a title and start/end times. For an event spanning midnight, choose the following date for its end.
+3. Select a card or an item in the list below to edit it. Use **回到现在** (Back to now) to return to the current moment.
+
+The interface is currently in Simplified Chinese. See the [usage guide](docs/usage.md) (Chinese) for scrolling, storage, and backup details.
 
 ## Run from source
 
@@ -33,12 +44,13 @@ npm.cmd run doctor
 npm.cmd run desktop:dev
 ```
 
-The development guide also covers frontend previews, builds, and dependency setup.
+The development guide covers frontend previews, tests, and builds. Browser preview data is stored separately in that browser; the Windows app uses its own local database.
 
 ## Documentation and contributing
 
 Project documentation is currently available in Chinese:
 
+- [Usage guide](docs/usage.md)
 - [Requirements and use cases](docs/requirements.md)
 - [Technical design](docs/technical-design.md)
 - [Windows development guide](docs/development.md)
@@ -58,19 +70,30 @@ License selection is pending. The chosen license will be published in the reposi
 
 面向 Windows 的流式日历，让时间连续呈现，让安排从此刻开始。
 
+![Timeflow Calendar 跨午夜事项界面](docs/images/timeline.jpg)
+
+*实际运行的浏览器预览截图，使用示例事项展示；Windows 应用采用相同界面。*
+
 ## 产品理念
 
-Timeflow Calendar 希望用连续的时间轴呈现日程：今天的 23:00 与明天的 00:00 自然相邻。即使上午已经过去一半，接下来的时间依然可以充分利用。
+Timeflow Calendar 用连续的时间轴呈现日程：今天的 23:00 与明天的 00:00 自然相邻。即使上午已经过去一半，接下来的时间依然可以充分利用。
 
-设计围绕三个方向展开：
-
-- **连续浏览时间**：左右拖动或滑动，以均匀的小时刻度浏览过去与未来，跨越午夜时自然衔接。
-- **随时安排事项**：在一小时内或跨多个小时安排事项，让跨午夜的安排保持完整。
-- **清晰识别日期**：通过时间轴上方的日期头部，了解每段时间属于哪一天。
+- **连续浏览时间**：左右拖动或滚动，以均匀的小时刻度浏览过去与未来，上方日期头部帮助定位。
+- **随时安排事项**：新增、编辑和删除事项，起止时间精确到分钟。跨午夜事项保持完整，重叠事项分行显示。
+- **快速定位**：回到当前时刻、跳转日期，或切换 4、8、12、24 小时视野。
+- **本地保存**：Windows 应用使用 SQLite 保存日程，重新打开后恢复；事项支持备注与颜色。
 
 ## 当前状态
 
-项目处于早期开发阶段，目前的 Windows 应用可以启动欢迎界面，上述时间轴与日程功能正在规划。下一步将制作交互原型，验证连续浏览、日期头部与事项布局。
+项目已有可从源码运行的早期版本，实现了连续浏览、事项编辑与本地保存。接下来结合日常使用完善交互体验，并准备首个 Windows 发布版本。
+
+## 基本用法
+
+1. 拖动时间轴空白处浏览时间。左右箭头按钮移动半屏；聚焦时间轴后，键盘左右方向键每次移动一小时。
+2. 双击空白处或点击“新建事项”，填写标题和起止时间。跨午夜安排请选择次日的结束日期。
+3. 点击事项卡片或下方列表进行编辑，通过“回到现在”返回当前时刻。
+
+滚轮操作、数据位置与备份方式见[使用指南](docs/usage.md)。
 
 ## 从源码运行
 
@@ -84,10 +107,11 @@ npm.cmd run doctor
 npm.cmd run desktop:dev
 ```
 
-前端预览、应用构建与依赖配置详见开发指南。
+前端预览、测试与应用构建详见开发指南。浏览器预览的数据单独保存在当前浏览器中，Windows 应用使用自己的本地数据库。
 
 ## 文档与贡献
 
+- [使用指南](docs/usage.md)
 - [基本需求与使用场景](docs/requirements.md)
 - [技术方案](docs/technical-design.md)
 - [Windows 开发指南](docs/development.md)

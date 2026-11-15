@@ -4,6 +4,7 @@ import EventEditor from "./components/EventEditor";
 import Timeline from "./components/Timeline";
 import DesktopMode from "./components/DesktopMode";
 import { viewSpan, viewStart, type ViewMode } from "./lib/viewport";
+import { useUiScale } from "./lib/useUiScale";
 import { deleteEvent, listEvents, saveEvent } from "./lib/storage";
 import { HOUR, MINUTE, clockTime, dateInput, dateLabel, durationLabel, eventTime, inRange, parseLocalInput, type CalendarEvent } from "./lib/time";
 
@@ -15,7 +16,8 @@ export default function App() {
   const [viewMode, setViewMode] = useState<ViewMode>("auto");
   const [width, setWidth] = useState(900);
   const [anchor, setAnchor] = useState(Date.now);
-  const span = viewSpan(viewMode, width);
+  const uiScale = useUiScale();
+  const span = viewSpan(viewMode, width, uiScale);
   const start = viewStart(anchor, span);
   const setStart = (value: number) => setAnchor(value + span / 4);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -112,10 +114,10 @@ export default function App() {
           </div>
           <label className="zoom-control">视野 <select aria-label="显示时间范围" value={viewMode} onChange={(e) => {
             setViewMode(e.target.value === "auto" ? "auto" : Number(e.target.value) as ViewMode);
-          }}><option value="auto">自动 · {(viewSpan("auto", width) / HOUR).toFixed(1)} 小时</option><option value={4}>4 小时</option><option value={8}>8 小时</option><option value={12}>12 小时</option><option value={24}>24 小时</option></select></label>
+          }}><option value="auto">自动 · {(viewSpan("auto", width, uiScale) / HOUR).toFixed(1)} 小时</option><option value={4}>4 小时</option><option value={8}>8 小时</option><option value={12}>12 小时</option><option value={24}>24 小时</option></select></label>
         </div>
         {loadError && <div className="load-error" role="alert">{loadError}<button className="text-button" onClick={() => setRevision((value) => value + 1)}>重新读取</button></div>}
-        <Timeline start={start} span={span} now={now} width={width} onWidthChange={setWidth} events={visibleEvents} loading={loading || !!loadError}
+        <Timeline start={start} span={span} now={now} width={width} uiScale={uiScale} onWidthChange={setWidth} events={visibleEvents} loading={loading || !!loadError}
           onBrowse={setStart} onCreate={(time) => { if (!loading && !loadError) create(time); }}
           onEdit={(event) => setEditor({ event, start: event.start })} />
         <footer className="timeline-footer"><span>拖动空白处浏览 · 双击安排事项 · 方向键微调</span><span>{loading ? "正在读取…" : "本地时间 · " + zone}</span></footer>

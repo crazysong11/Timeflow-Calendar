@@ -25,6 +25,8 @@ Timeflow Calendar presents your schedule on a continuous timeline: 23:00 today s
 
 Version **1.0.0** provides continuous browsing, event editing, local persistence, and an adjustable desktop mode. Development continues through everyday use and community feedback.
 
+The development branch also scales text, controls, and event cards with the window, with minimum sizes for smaller windows. This improvement will be included in the next installer release.
+
 ## Download and install
 
 Download the [Windows x64 installer](https://github.com/crazysong11/Timeflow-Calendar/releases/download/v1.0.0/Timeflow-Calendar_1.0.0_x64-setup.exe) for Windows 10/11, run it, and follow the setup wizard. Launch **Timeflow Calendar** from the Start menu after installation. The installer supports Simplified Chinese and English; the app interface is currently in Simplified Chinese.
@@ -100,6 +102,8 @@ Timeflow Calendar 用连续的时间轴呈现日程：今天的 23:00 与明天�
 ## 当前状态
 
 **1.0.0** 已提供连续浏览、事项编辑、本地保存和可调整布局的桌面模式。后续结合日常使用和社区反馈完善交互体验。
+
+开发分支已加入字号、控件和事项卡片随窗口缩放的适配，并为小窗口设置最小尺寸，将随下一版安装包提供。
 
 ## 下载安装
 

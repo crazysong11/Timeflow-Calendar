@@ -3,14 +3,14 @@ import { HOUR, MINUTE, clockTime, dateInput, dateLabel, dateSegments, eventTime,
 
 interface Props {
   start: number; span: number; now: number; events: CalendarEvent[]; loading: boolean;
-  width: number;
+  width: number; uiScale: number;
   onWidthChange: (width: number) => void;
   onBrowse: (start: number) => void;
   onCreate: (time: number) => void;
   onEdit: (event: CalendarEvent) => void;
 }
 
-export default function Timeline({ start, span, now, width, onWidthChange, events, loading, onBrowse, onCreate, onEdit }: Props) {
+export default function Timeline({ start, span, now, width, uiScale, onWidthChange, events, loading, onBrowse, onCreate, onEdit }: Props) {
   const surface = useRef<HTMLDivElement>(null);
   const drag = useRef<{ id: number; x: number; start: number; moved: boolean } | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -23,7 +23,7 @@ export default function Timeline({ start, span, now, width, onWidthChange, event
   const height = 124 + lanes * 96;
   const x = (time: number) => timeToX(time, start, span, width);
   const nowX = x(now);
-  const labelStep = Math.max(1, Math.ceil(62 / (width / (span / HOUR))));
+  const labelStep = Math.max(1, Math.ceil(Math.max(50, 62 * uiScale) / (width / (span / HOUR))));
 
   useEffect(() => {
     const observer = new ResizeObserver(([entry]) => {
@@ -96,7 +96,7 @@ export default function Timeline({ start, span, now, width, onWidthChange, event
         const time = xToTime(e.clientX - bounds.left, start, span, width);
         onCreate(Math.round(time / (5 * MINUTE)) * 5 * MINUTE);
       }}>
-      <div className="timeline-canvas" style={{ minHeight: height }}>
+      <div className="timeline-canvas" style={{ minHeight: `${height / 16}rem` }}>
         <div className="elapsed-shade" style={{ width: Math.max(0, Math.min(width, nowX)) }} />
         {dates.map((segment) => <div className="date-band" key={segment.date} style={{ left: x(segment.start), width: x(segment.end) - x(segment.start) }}>
           <span title={dateInput(segment.date)}>{dateInput(segment.date) === dateInput(now) && <b>今天</b>}{dateLabel(segment.date)}</span>
@@ -111,8 +111,8 @@ export default function Timeline({ start, span, now, width, onWidthChange, event
           const right = Math.min(width, x(event.end));
           const clippedStart = event.start < start;
           const clippedEnd = event.end > end;
-          return <button key={event.id} className={"timeline-event " + event.color + (right - left < 50 ? " compact-event" : "") + (clippedStart ? " continues-before" : "") + (clippedEnd ? " continues-after" : "")}
-            style={{ left, width: Math.max(2, right - left), top: 116 + lane * 96 }}
+          return <button key={event.id} className={"timeline-event " + event.color + (right - left < 50 * uiScale ? " compact-event" : "") + (clippedStart ? " continues-before" : "") + (clippedEnd ? " continues-after" : "")}
+            style={{ left, width: Math.max(2, right - left), top: `${(116 + lane * 96) / 16}rem` }}
             title={event.title + "\n" + dateInput(event.start) + " " + eventTime(event) + (event.notes ? "\n" + event.notes : "")}
             aria-label={"编辑 " + event.title + "，" + eventTime(event)}
             onClick={() => onEdit(event)}>

@@ -18,6 +18,23 @@ test("自动视野在不同窗口宽度下保持小时宽度和浏览锚点", ()
   }
 });
 
+test("界面缩放同步小时宽度，缩放前后保持浏览锚点与拖动时间换算", () => {
+  const anchor = new Date("2027-01-02T10:15:00").getTime();
+  for (const scale of [0.75, 0.82, 0.9, 1]) {
+    for (const width of [560, 980, 1800, 2500]) {
+      const span = viewSpan("auto", width, scale);
+      const start = viewStart(anchor, span);
+      const hourWidth = 140 * scale;
+      assert.ok(Math.abs(timeToX(start + HOUR, start, span, width) - hourWidth) < 0.001);
+      assert.ok(Math.abs(xToTime(hourWidth, start, span, width) - start - HOUR) < 0.001);
+      assert.equal(start + span / 4, anchor);
+      for (const mode of [4, 8, 12, 24] as const) {
+        assert.equal(viewSpan(mode, width, scale), mode * HOUR);
+      }
+    }
+  }
+});
+
 test("固定视野保持选定时长，切换模式保留已浏览的时刻", () => {
   const browsedAnchor = new Date("2027-01-02T10:15:00").getTime();
   for (const width of [560, 980, 1800]) {

@@ -235,6 +235,12 @@ h1 { margin: 0; font-size: 2.25rem; font-weight: 550; letter-spacing: 2px; }
 .appearance-fields p { color: var(--muted); font-size: max(11px,.8125rem); line-height: 1.7; }
 .appearance-fields > .appearance-check { justify-content: flex-start; }
 .appearance-check input { accent-color: var(--green); min-width: 16px; min-height: 16px; }
+.settings-update, .update-banner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding-block: .75rem; border-top: 1px solid var(--line); font-size: max(12px,.875rem); }
+.update-content { font-size: max(12px,.9375rem); line-height: 1.7; }
+.update-content h3 { font-size: 1.0625rem; }
+.update-notes { font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 32vh; overflow-y: auto; padding-right: .5rem; }
+.update-content progress { width: 100%; accent-color: var(--green); }
+.update-hint { color: var(--muted); font-size: max(11px,.8125rem); }
 :root[data-theme=light] { color-scheme: light; }
 :root[data-theme=dark] { color-scheme: dark; color: #dfebe3; background: #18221e; --muted: #a3b2a8; --line: #3c4b42; --green: #507b60; }
 [data-theme=dark] .calendar, [data-theme=dark] .event-dialog, [data-theme=dark] .event-menu, [data-theme=dark] .button:not(.primary):not(.danger) { background: #222f28; color: #dfebe3; border-color: #3c4b42; }

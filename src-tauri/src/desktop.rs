@@ -254,6 +254,7 @@ pub fn setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
         None::<&str>,
     )?;
     let pin = MenuItem::with_id(app, "pin", "贴到桌面", true, None::<&str>)?;
+    let update = MenuItem::with_id(app, "update", "检查更新", true, None::<&str>)?;
     let exit = MenuItem::with_id(app, "exit", "退出 Timeflow Calendar", true, None::<&str>)?;
     let about = PredefinedMenuItem::about(app, Some("关于 Timeflow Calendar"), Some(AboutMetadata {
         name: Some("Timeflow Calendar".into()),
@@ -264,12 +265,17 @@ pub fn setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
         website_label: Some("对应版本源码".into()),
         ..Default::default()
     }))?;
-    let menu = Menu::with_items(app, &[&restore, &pin, &about, &exit])?;
+    let menu = Menu::with_items(app, &[&restore, &pin, &update, &about, &exit])?;
     let mut tray = TrayIconBuilder::with_id("timeflow")
         .tooltip("Timeflow Calendar")
         .menu(&menu)
         .show_menu_on_left_click(true)
         .on_menu_event(|app, event| {
+            if event.id.as_ref() == "update" {
+                reveal_existing(app);
+                let _ = app.emit("check-for-updates", ());
+                return;
+            }
             if event.id.as_ref() == "exit" {
                 app.exit(0);
                 return;

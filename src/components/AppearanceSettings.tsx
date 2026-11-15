@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { DEFAULT_APPEARANCE, type Appearance } from "../lib/appearance";
 
-export default function AppearanceSettings({ value, error, onChange, onClose }: {
-  value: Appearance; error: string; onChange: (value: Appearance) => void; onClose: () => void;
+export default function AppearanceSettings({ value, error, onChange, onClose, onCheckUpdates }: {
+  value: Appearance; error: string; onChange: (value: Appearance) => void; onClose: () => void; onCheckUpdates?: () => void;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => { const element = dialog.current!; element.showModal(); return () => element.close(); }, []);
@@ -22,6 +22,7 @@ export default function AppearanceSettings({ value, error, onChange, onClose }: 
       <p>关闭后，桌面面板集中显示时间轴。普通窗口继续显示事项列表。</p>
     </div>
     {error && <p className="form-error" role="alert">{error}</p>}
+    {onCheckUpdates && <div className="settings-update"><span>启动时自动检查新版本</span><button className="button" onClick={onCheckUpdates}>检查更新</button></div>}
     <footer className="dialog-actions"><button className="text-button" onClick={() => onChange({ ...DEFAULT_APPEARANCE })}>恢复默认外观</button><div className="action-spacer" />
       <button className="button primary" onClick={onClose}>完成</button></footer>
   </dialog>;

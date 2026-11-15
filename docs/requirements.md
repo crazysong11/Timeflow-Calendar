@@ -85,3 +85,7 @@ Timeflow Calendar 以连续时间轴支持日程安排，首先面向 Windows。
 桌面模式已实现固定、直接移动和缩放，交互设计和验收记录见[桌面模式设计](desktop-mode.md)。
 
 采用 Tauri 2 + React + TypeScript + CSS，使用 Vite 和 npm 构建，SQLite 与 Tauri SQL 插件负责本地保存。详见[技术方案](technical-design.md)。
+
+## 程序内更新（1.0.1 修订版）
+
+启动后后台检查 GitHub Releases 的稳定版本；设置和托盘提供手动入口。显示版本与增量更新说明，用户确认后下载、验证签名、覆盖安装并重启，保留本地数据和布局。无更新和离线状态保持正常日程操作；手动检查提供结果与重试。事项编辑或保存期间等待完成后安装。

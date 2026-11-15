@@ -28,7 +28,9 @@ Version 1.0.1 adds window-adaptive sizing, draggable events and resize handles, 
 
 Download the [Windows x64 installer](https://github.com/crazysong11/Timeflow-Calendar/releases/download/v1.0.1/Timeflow-Calendar_1.0.1_x64-setup.exe) for Windows 10/11, run it, and follow the setup wizard. Launch **Timeflow Calendar** from the Start menu after installation. The installer supports Simplified Chinese and English; the app interface is currently in Simplified Chinese.
 
-Setup installs for the current user and installs Microsoft WebView2 when needed; this step requires an internet connection. See the [1.0.1 release](https://github.com/crazysong11/Timeflow-Calendar/releases/tag/v1.0.1) for release notes, source code, and SHA-256 checksums. This release is unsigned. Installation and backup details are in the [usage guide](docs/usage.md).
+Setup installs for the current user and installs Microsoft WebView2 when needed; this step requires an internet connection. See the [1.0.1 release](https://github.com/crazysong11/Timeflow-Calendar/releases/tag/v1.0.1) for release notes, source code, and SHA-256 checksums. The Windows installer has no Authenticode signature; in-app updates are verified with a separate update signature. Installation and backup details are in the [usage guide](docs/usage.md).
+
+Startup checks for new versions automatically. Use **检查更新** (Check for updates) in settings or the tray menu to check manually, then download and install an update in place. Events and preferences are preserved. If you installed the original 1.0.1 package, download the refreshed installer once to enable future in-app updates.
 
 ## Basic use
 

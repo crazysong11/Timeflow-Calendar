@@ -8,6 +8,7 @@ pub fn run() {
             let handle = app.clone();
             let _ = app.run_on_main_thread(move || desktop::reveal_existing(&handle));
         }))
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .manage(desktop::DesktopState::default())
         .invoke_handler(tauri::generate_handler![
             desktop::desktop_status,

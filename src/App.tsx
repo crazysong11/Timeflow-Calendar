@@ -5,6 +5,8 @@ import Timeline from "./components/Timeline";
 import DesktopMode from "./components/DesktopMode";
 import EventMenu, { type EventMenuTarget } from "./components/EventMenu";
 import AppearanceSettings from "./components/AppearanceSettings";
+import SoftwareUpdate from "./components/SoftwareUpdate";
+import { useUpdates } from "./lib/useUpdates";
 import { useAppearance } from "./lib/useAppearance";
 import { EventHistory, type EventChange } from "./lib/eventChanges";
 import { viewSpan, viewStart, type ViewMode } from "./lib/viewport";
@@ -19,6 +21,7 @@ export default function App() {
   const [pinned, setPinned] = useState(false);
   const { appearance, setAppearance, appearanceError } = useAppearance();
   const [appearanceOpen, setAppearanceOpen] = useState(false);
+  const updates = useUpdates();
   const [viewMode, setViewMode] = useState<ViewMode>("auto");
   const [width, setWidth] = useState(900);
   const [anchor, setAnchor] = useState(Date.now);
@@ -39,6 +42,8 @@ export default function App() {
   const [menu, setMenu] = useState<EventMenuTarget | null>(null);
   const closeMenu = useCallback(() => setMenu(null), []);
   const [editor, setEditor] = useState<{ event: CalendarEvent | null; start: number } | null>(null);
+  const installBlocked = useRef(false);
+  installBlocked.current = busy || !!editor;
   const [jumpDate, setJumpDate] = useState(() => dateInput(Date.now()));
   const end = start + span;
   const visibleEvents = useMemo(() => events.filter((event) => inRange(event, start, end)).sort((a, b) => a.start - b.start || a.id.localeCompare(b.id)), [events, start, end]);
@@ -143,6 +148,7 @@ export default function App() {
           {desktop && <DesktopMode onChange={setPinned} onNotice={setNotice} />}
         </div>
       </header>
+      {desktop && updates.state.version && <div className="update-banner" role="status"><span>新版本 {updates.state.version} 已可用</span><button className="text-button" onClick={() => updates.setOpen(true)}>查看更新</button></div>}
       <section className="intro">
         <div><p className="eyebrow">MAKE ROOM FOR YOUR TIME</p><h1>从此刻，开始。</h1><p className="subtitle">时间一直向前，每一刻都可以是新的起点。</p></div>
         <div className="live-clock"><span>{clockTime(now)}</span><p>{dateLabel(now)}</p></div>
@@ -193,7 +199,10 @@ export default function App() {
       <footer className="app-footer"><span>TIME FLOWS. YOU BEGIN.</span><span role="status">{notice || (desktop ? "每次保存后自动写入本地" : "桌面版与浏览器预览分别保存日程")}</span></footer>
       {editor && <EventEditor event={editor.event} start={editor.start} onSave={persist} onDelete={remove} onClose={() => setEditor(null)} />}
       {menu && <EventMenu target={menu} onClose={closeMenu} onComplete={() => void complete(menu.event)} onEdit={() => { setEditor({ event: menu.event, start: menu.event.start }); closeMenu(); }} />}
-      {appearanceOpen && <AppearanceSettings value={appearance} error={appearanceError} onChange={setAppearance} onClose={() => setAppearanceOpen(false)} />}
+      {appearanceOpen && <AppearanceSettings value={appearance} error={appearanceError} onChange={setAppearance} onClose={() => setAppearanceOpen(false)}
+        onCheckUpdates={desktop ? () => { setAppearanceOpen(false); updates.manualCheck(); } : undefined} />}
+      {desktop && updates.open && <SoftwareUpdate state={updates.state} version={updates.version} blocked={busy || !!editor}
+        onCheck={updates.manualCheck} onClose={() => updates.setOpen(false)} onInstall={() => void updates.controller.install(() => !installBlocked.current)} />}
     </main>
   );
 }

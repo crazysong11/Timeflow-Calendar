@@ -1,0 +1,21 @@
+# 本地临时工作文件
+work/
+.tools/
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/schemas/
+*.tsbuildinfo
+
+# 编辑器和操作系统临时文件
+.vs/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
+
+# 本地环境变量和日志
+.env
+.env.*
+!.env.example
+*.log

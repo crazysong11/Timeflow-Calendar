@@ -222,6 +222,7 @@ h1 { margin: 0; font-size: 2.25rem; font-weight: 550; letter-spacing: 2px; }
 .event-completed strong { text-decoration: line-through; text-decoration-thickness: 1px; }
 .timeline-event.event-completed { background: color-mix(in srgb, var(--event-bg) 55%, #fffefa); border-left-style: dotted; }
 .undo-button { border-color: var(--line); }
+.undo-button:disabled { cursor: default; }
 .undo-button svg { width: max(18px, 1.25rem); height: max(18px, 1.25rem); fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .editor-fields > .completion-control { display: flex; align-items: center; gap: .5rem; }
 .completion-control input { accent-color: var(--green); width: 16px; height: 16px; margin: 0; }
